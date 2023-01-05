@@ -1,20 +1,17 @@
+// Initial Variables
 let sketchpadResolution = 10;
 
 // Selecting DOM elements
-
 const sketchArea = document.querySelector('#sketch-area');
 const createBtn = document.querySelector('#create');
 
 // Event listeners
-
 createBtn.addEventListener('click', CreateClick);
 
-
-// Creating the sketchpad
+// Start-up
 CreateGrid(sketchpadResolution);
 
-
-
+// Functions
 function CreateClick() {
     RemoveAllChildren(sketchArea);
 
@@ -30,8 +27,6 @@ function CreateClick() {
         alert('Grid Size must be between 10 and 100.');
         CreateGrid(sketchpadResolution);   
     }
-
-
 }
 
 function RemoveAllChildren(node) {
@@ -41,13 +36,18 @@ function RemoveAllChildren(node) {
 }
 
 function CreateGrid(sketchpadResolution) {
-    let pixelSize = `${500 / sketchpadResolution}px`
+    let pixelSize = `${600 / sketchpadResolution}px`
     
     for (let i = 1; i <= (sketchpadResolution * sketchpadResolution); i++) {
         let pixel = document.createElement('div');
         pixel.classList.add('sketch-pixel');
         pixel.setAttribute('style', `height: ${pixelSize}; width: ${pixelSize}`)
-        
+        pixel.addEventListener('mouseenter', Paint);
+
         sketchArea.appendChild(pixel);
     }
+}
+
+function Paint(e) {
+    e.target.style.backgroundColor = 'black';
 }
