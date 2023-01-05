@@ -16,11 +16,13 @@ main {
     margin: 50px;
     display: flex;
     flex-wrap: wrap;
-    border: 1px solid black;
+    border: 2px solid black;
     border-radius: 5px;
-
+    box-shadow: 1px 1px 10px 3px rgba(0, 0, 0, .1);
 }
 
 .sketch-pixel {
     border: 1px solid gray;
+    margin: -1px;
+    background-color: whitesmoke;
 }
