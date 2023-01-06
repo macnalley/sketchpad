@@ -1,12 +1,15 @@
 // Initial Variables
 let sketchpadResolution = 10;
+let brushOn = false;
 
 // Selecting DOM elements
 const sketchArea = document.querySelector('#sketch-area');
 const createBtn = document.querySelector('#create');
+const brushStateText = document.querySelector('#brush-state');
 
 // Event listeners
 createBtn.addEventListener('click', CreateClick);
+sketchArea.addEventListener('click', ToggleBrush);
 
 // Start-up
 CreateGrid(sketchpadResolution);
@@ -49,5 +52,21 @@ function CreateGrid(sketchpadResolution) {
 }
 
 function Paint(e) {
-    e.target.style.backgroundColor = 'black';
+    if (brushOn) {
+        e.target.style.backgroundColor = 'black';
+    }
+}
+
+function ToggleBrush() {
+    if (!brushOn) {
+        brushOn = true;
+    }
+    else brushOn = false;
+
+    UpdateBrushText();
+}
+
+function UpdateBrushText() {
+    if (brushOn) brushStateText.textContent = 'On';
+    else brushStateText.textContent = 'Off';
 }
