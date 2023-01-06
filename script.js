@@ -1,6 +1,6 @@
 // Initial Variables
-let sketchpadResolution = 10;
-let brushOn = false;
+let sketchpadResolution = 8;
+let isBrushOn = false;
 
 // Selecting DOM elements
 const sketchArea = document.querySelector('#sketch-area');
@@ -8,26 +8,28 @@ const createBtn = document.querySelector('#create');
 const brushStateText = document.querySelector('#brush-state');
 
 // Event listeners
-createBtn.addEventListener('click', CreateClick);
+createBtn.addEventListener('click', ClickCreate);
 sketchArea.addEventListener('click', ToggleBrush);
+sketchArea.addEventListener('touchbegin', TurnBrushOn);
+sketchArea.addEventListener('touchend', TurnBrushOff);
 
 // Start-up
 CreateGrid(sketchpadResolution);
 
 // Functions
-function CreateClick() {
+function ClickCreate() {
     RemoveAllChildren(sketchArea);
 
     let resolutionInput = document.querySelector('#grid-size').value;
 
-    if (resolutionInput >= 10 && resolutionInput <= 100) {
+    if (resolutionInput >= 8 && resolutionInput <= 64) {
         sketchpadResolution = resolutionInput;
         
         CreateGrid(sketchpadResolution);
     }
 
     else {
-        alert('Grid Size must be between 10 and 100.');
+        alert('Grid size must be between 8 and 64.');
         CreateGrid(sketchpadResolution);   
     }
 }
@@ -46,27 +48,36 @@ function CreateGrid(sketchpadResolution) {
         pixel.classList.add('sketch-pixel');
         pixel.setAttribute('style', `height: ${pixelSize}; width: ${pixelSize}`)
         pixel.addEventListener('mouseenter', Paint);
+        pixel.addEventListener('touchmove', Paint);
 
         sketchArea.appendChild(pixel);
     }
 }
 
 function Paint(e) {
-    if (brushOn) {
+    if (isBrushOn) {
         e.target.style.backgroundColor = 'black';
     }
 }
 
 function ToggleBrush() {
-    if (!brushOn) {
-        brushOn = true;
+    if (!isBrushOn) {
+        isBrushOn = true;
     }
-    else brushOn = false;
+    else isBrushOn = false;
 
     UpdateBrushText();
 }
 
+function TurnBrushOn() {
+    isBrushOn = true;
+}
+
+function TurnBrushOff() {
+    isBrushOn = false;
+}
+
 function UpdateBrushText() {
-    if (brushOn) brushStateText.textContent = 'On';
+    if (isBrushOn) brushStateText.textContent = 'On';
     else brushStateText.textContent = 'Off';
 }
