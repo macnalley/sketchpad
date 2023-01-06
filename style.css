@@ -11,8 +11,7 @@ main {
 }
 
 #sketch-area {
-    width: 600px;
-    height: 600px;
+    max-width: 601px;
     margin: 50px;
     display: flex;
     flex-wrap: wrap;
