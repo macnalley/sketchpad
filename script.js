@@ -10,8 +10,10 @@ const brushStateText = document.querySelector('#brush-state');
 // Event listeners
 createBtn.addEventListener('click', ClickCreate);
 sketchArea.addEventListener('click', ToggleBrush);
-sketchArea.addEventListener('touchbegin', TurnBrushOn);
+sketchArea.addEventListener('touchstart', TurnBrushOn);
 sketchArea.addEventListener('touchend', TurnBrushOff);
+sketchArea.addEventListener('touchmove', FingerPaint);
+
 
 // Start-up
 CreateGrid(sketchpadResolution);
@@ -48,7 +50,6 @@ function CreateGrid(sketchpadResolution) {
         pixel.classList.add('sketch-pixel');
         pixel.setAttribute('style', `height: ${pixelSize}; width: ${pixelSize}`)
         pixel.addEventListener('mouseenter', Paint);
-        pixel.addEventListener('touchmove', Paint);
 
         sketchArea.appendChild(pixel);
     }
@@ -69,15 +70,30 @@ function ToggleBrush() {
     UpdateBrushText();
 }
 
-function TurnBrushOn() {
+function TurnBrushOn(e) {
     isBrushOn = true;
+    UpdateBrushText();
 }
 
-function TurnBrushOff() {
+function TurnBrushOff(e) {
     isBrushOn = false;
+    UpdateBrushText();
 }
 
 function UpdateBrushText() {
-    if (isBrushOn) brushStateText.textContent = 'On';
-    else brushStateText.textContent = 'Off';
+    if (isBrushOn) { brushStateText.textContent = 'On'; }
+    else { brushStateText.textContent = 'Off'; }
+}
+
+function ReleasePointer(e) {
+    e.target.releasePointerCapture(e.pointerId);
+}
+
+function FingerPaint (e) {
+
+    let element = document.elementFromPoint(e.touches[0].pageX, e.touches[0].pageY);
+    
+    if (isBrushOn && element.className == 'sketch-pixel') {
+        element.style.backgroundColor = 'black';
+    }
 }
