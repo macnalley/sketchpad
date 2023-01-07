@@ -1,31 +1,47 @@
-// Initial Variables
-let sketchpadResolution = 8;
-let isBrushOn = false;
+// COLOR PALETTES. A color palette is an array of swatches defined as hex code strings.
+let blackPalette = ['#000000'];
+let randomPalette = ['random'];
+let eraserPalette = ['whitesmoke'];
 
-// Selecting DOM elements
+// DOM ELEMENTS
 const sketchArea = document.querySelector('#sketch-area');
 const createBtn = document.querySelector('#create');
 const brushStateText = document.querySelector('#brush-state');
+const clearBtn = document.querySelector('#clear');
+const resolutionInput = document.querySelector('#grid-size');
+const paletteBtns = document.querySelectorAll('.palette-button');
+const paletteStateText = document.querySelector('#palette-state');
 
-// Event listeners
+// INITIAL GLOBAL VARIABLES
+let sketchpadResolution = 16;
+resolutionInput.value = sketchpadResolution;
+let isBrushOn = false;
+let palette = blackPalette;
+let paletteState = 'Black';
+
+
+// EVENT LISTENERS
 createBtn.addEventListener('click', ClickCreate);
+clearBtn.addEventListener('click', ClickClear);
 sketchArea.addEventListener('click', ToggleBrush);
 sketchArea.addEventListener('touchstart', TurnBrushOn);
 sketchArea.addEventListener('touchend', TurnBrushOff);
 sketchArea.addEventListener('touchmove', FingerPaint);
+paletteBtns.forEach(btn => btn.addEventListener('click', SelectPalette));
 
 
-// Start-up
+// START-UP
+document.querySelector('#grid-size').value = sketchpadResolution;
 CreateGrid(sketchpadResolution);
 
-// Functions
+// FUNCTIONS
 function ClickCreate() {
     RemoveAllChildren(sketchArea);
 
-    let resolutionInput = document.querySelector('#grid-size').value;
+    let newResolution = resolutionInput.value
 
-    if (resolutionInput >= 8 && resolutionInput <= 64) {
-        sketchpadResolution = resolutionInput;
+    if (newResolution >= 8 && newResolution <= 64) {
+        sketchpadResolution = newResolution;
         
         CreateGrid(sketchpadResolution);
     }
@@ -34,6 +50,11 @@ function ClickCreate() {
         alert('Grid size must be between 8 and 64.');
         CreateGrid(sketchpadResolution);   
     }
+}
+
+function ClickClear() {
+    RemoveAllChildren(sketchArea);
+    CreateGrid(sketchpadResolution); 
 }
 
 function RemoveAllChildren(node) {
@@ -57,7 +78,7 @@ function CreateGrid(sketchpadResolution) {
 
 function Paint(e) {
     if (isBrushOn) {
-        e.target.style.backgroundColor = 'black';
+        e.target.style.backgroundColor = PickColor(palette);
     }
 }
 
@@ -94,6 +115,54 @@ function FingerPaint (e) {
     let element = document.elementFromPoint(e.touches[0].pageX, e.touches[0].pageY);
     
     if (isBrushOn && element.className == 'sketch-pixel') {
-        element.style.backgroundColor = 'black';
+        element.style.backgroundColor = PickColor(palette);
     }
+}
+
+function SelectPalette(e) {
+    let selectedPalette = e.target.id; 
+
+    switch (selectedPalette) {
+        case 'black-palette':
+            palette = blackPalette;
+            paletteState = 'Black';
+            break;
+        case 'random-palette':
+            palette = randomPalette;
+            paletteState = 'Random';
+            break;
+        case 'eraser-palette':
+            palette = eraserPalette;
+            paletteState = 'Eraser';
+            break; 
+        default:
+            palette = blackPalette;
+            paletteState = 'Black';
+            break;
+    }
+
+    paletteStateText.textContent = paletteState;
+}
+
+//Selects a random color from a palette
+function PickColor(palette) {
+    if (palette[0] == 'random') { return RandomColor(); }
+    else {
+        let swatch = Math.floor(Math.random() * palette.length);    
+        let color = palette[swatch];
+        return color;
+    }
+}
+
+//Returns a random color hexcode string
+function RandomColor() {
+    let red = Random255().toString(16);
+    let blue = Random255().toString(16);
+    let green = Random255().toString(16);
+    return `#${red}${blue}${green}`;
+}
+
+//Picks a random integer between 1 and 255
+function Random255() {
+    return Math.floor(Math.random() * 255) + 1;
 }

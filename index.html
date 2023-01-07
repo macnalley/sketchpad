@@ -15,13 +15,23 @@
                 <label for="grid-size">Grid Size</label>
                 <input type="text" id="grid-size">
                 <button id="create">Create</button>
+                <button id="clear">Clear</button>
             </span>
-            <span>
+            <div id="color-palettes">
+                <h2>Color Palettes</h2>
+                <button class="palette-button" id="black-palette">Black</button>
+                <button class="palette-button" id="random-palette">Random</button>
+                <button class="palette-button" id="eraser-palette">Eraser</button>
+            </div>
+            <div>
                 <p>Click in the canvas to toggle the brush.</p>
                 <p>
                     Your brush is: <span id="brush-state">Off</span>.
                 </p>
-            </span>
+                <p>
+                    Your palette is: <span id="palette-state">Black</span> 
+                </p>
+            </div>
             <div id="sketch-area"></div>
         </main>
     </body>
