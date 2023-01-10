@@ -1,12 +1,20 @@
+html {
+    height: 100%;
+}
+
 body {
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 main {
+    margin-top: 50px;
+    height: 100%;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    gap: 50px;
 }
 
 h2 {
@@ -15,7 +23,6 @@ h2 {
 
 #sketch-area {
     max-width: 601px;
-    margin: 50px;
     display: flex;
     flex-wrap: wrap;
     border: 2px solid black;
@@ -31,10 +38,7 @@ h2 {
 }
 
 #options {
-    height: 600px;
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
+    height: 100%;
 }
 
 .settings-block {
